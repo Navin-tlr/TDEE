@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "199954355172",
+    "project_id": "tdee-adaptive-app",
+    "storage_bucket": "tdee-adaptive-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199954355172:android:4e0dcf603ff57c98ecedf1",
+        "android_client_info": {
+          "package_name": "com.tdeeapp.client"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDygXjHXNMsrQ-bUqnK56BjYkeKaJx9zzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

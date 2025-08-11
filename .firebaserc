@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "TDEE": "tdee-adaptive-app",
+    "default": "tdee-adaptive-app"
+  },
+  "targets": {},
+  "etags": {}
+}
