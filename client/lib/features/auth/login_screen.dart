@@ -29,26 +29,33 @@ class LoginScreen extends ConsumerWidget {
               obscureText: true,
             ),
             const SizedBox(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    ref.read(authServiceProvider).signInWithEmail(
-                          emailController.text.trim(),
-                          passwordController.text.trim(),
-                        );
-                  },
-                  child: const Text('Sign In'),
+                SizedBox(
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ref.read(authServiceProvider).signInWithEmail(
+                            emailController.text.trim(),
+                            passwordController.text.trim(),
+                          );
+                    },
+                    child: const Text('Sign In'),
+                  ),
                 ),
-                OutlinedButton(
-                  onPressed: () {
-                    ref.read(authServiceProvider).createUserWithEmail(
-                          emailController.text.trim(),
-                          passwordController.text.trim(),
-                        );
-                  },
-                  child: const Text('Sign Up'),
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 52,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      ref.read(authServiceProvider).createUserWithEmail(
+                            emailController.text.trim(),
+                            passwordController.text.trim(),
+                          );
+                    },
+                    child: const Text('Sign Up'),
+                  ),
                 ),
               ],
             ),

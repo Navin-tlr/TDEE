@@ -1,29 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:client/features/auth/auth_provider.dart'; // Import auth provider to get the user's state.
+import 'package:client/features/auth/auth_provider.dart';
+import 'package:client/features/dashboard/daily_stats.dart';
 
-// This StreamProvider will listen to our 'food_daily' collection for today's entry
-// for the currently authenticated user.
-final dailyStatsProvider = StreamProvider.autoDispose<DocumentSnapshot>((ref) {
+// This StreamProvider now returns a strongly-typed DailyStats object.
+final dailyStatsProvider = StreamProvider.autoDispose<DailyStats>((ref) {
   final firestore = FirebaseFirestore.instance;
-  
-  // Watch the authStateProvider to get the current user.
-  // This ensures that if the user logs out, the stream is updated.
   final user = ref.watch(authStateProvider).value;
 
-  // If no user is logged in, we return an empty stream to avoid errors.
   if (user == null) {
-    return const Stream.empty();
+    return Stream.value(DailyStats.initial());
   }
 
-  // Use the REAL authenticated user ID for the document path.
-  final userId = user.uid; 
-  final today = DateTime.now();
+  final userId = user.uid;
   
-  // Construct the document ID in the format "uid_YYYYMMDD".
-  final docId = "${userId}_${today.year}${today.month.toString().padLeft(2, '0')}${today.day.toString().padLeft(2, '0')}";
+  // This provider now listens ONLY to the user document. 
+  // The daily food log data is read by the dashboard widgets themselves.
+  final userDocStream = firestore.collection('users').doc(userId).snapshots();
 
-  // Return a real-time stream of the specific document. The UI will
-  // automatically rebuild whenever this document is created or updated.
-  return firestore.collection('food_daily').doc(docId).snapshots();
+  // Combine the streams to build a complete DailyStats object.
+  return userDocStream.asyncMap((userDoc) async {
+    // We get the daily stats separately now
+    final dailyStatsDocId = "${userId}_${DateTime.now().year}${DateTime.now().month.toString().padLeft(2, '0')}${DateTime.now().day.toString().padLeft(2, '0')}";
+    final foodDoc = await firestore.collection('food_daily').doc(dailyStatsDocId).get();
+    
+    final userData = userDoc.data() ?? {};
+    final foodData = foodDoc.data() ?? {};
+
+    // Merge data from both documents into a single map.
+    final combinedData = {...userData, ...foodData};
+
+    return DailyStats.fromFirestore(combinedData);
+  });
 });

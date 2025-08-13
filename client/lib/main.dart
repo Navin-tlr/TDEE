@@ -1,4 +1,5 @@
 import 'package:client/features/auth/auth_wrapper.dart';
+import 'package:client/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,10 +26,8 @@ class TDEEApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'TDEE Adaptive Calorie App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
       // The AuthWrapper is the home widget. It will decide whether to show
       // the LoginScreen or the DashboardScreen based on the auth state.

@@ -9,5 +9,39 @@ service cloud.firestore {
       // The write rule remains the same, as it's for creating/updating data.
       allow write: if request.auth.uid == request.resource.data.uid;
     }
+    
+    // Rules for the users collection
+    match /users/{userId} {
+      // Users can read and write their own user document
+      allow read, write: if request.auth.uid == userId;
+    }
+    
+    // Rules for weight logs
+    match /weight_logs/{docId} {
+      // Read: compare against stored resource (not request.resource)
+      allow read: if request.auth.uid == resource.data.uid;
+      // Write: validate the incoming data belongs to the user
+      allow write: if request.auth.uid == request.resource.data.uid;
+    }
+    
+    // Rules for food entries
+    match /food_entries/{docId} {
+      // Read: compare against stored resource (not request.resource)
+      allow read: if request.auth.uid == resource.data.uid;
+      // Write: validate the incoming data belongs to the user
+      allow write: if request.auth.uid == request.resource.data.uid;
+    }
+    
+    // Rules for weekly audits (server-side access)
+    match /weekly_audits/{docId} {
+      // Allow read/write for authenticated users (server will use service account)
+      allow read, write: if request.auth != null;
+    }
+    
+    // Rules for runner lock (server-side access)
+    match /runner_lock/{docId} {
+      // Allow read/write for authenticated users (server will use service account)
+      allow read, write: if request.auth != null;
+    }
   }
 }

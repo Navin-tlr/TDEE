@@ -15,13 +15,14 @@ class MetricCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Expanded(
+    return Flexible(
       child: Card(
         color: color ?? Theme.of(context).colorScheme.surface,
         elevation: 2,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 title,
